@@ -1,0 +1,5 @@
+[user]
+	email = bleyer23@gmail.com
+	name = adibl
+[diff]
+    tool = vimdiff
