@@ -5,6 +5,7 @@ filetype plugin on "??
 set completeopt+=menuone,noselect " always add autocomplete menu and dot select first match
 set path+=** "search file in all subdirectory
 set wildmenu "set menu to select if multible files match
+set wildignore+=*.pyc "ignore python run files in search
 set tabstop=4 "replace tab with 4 spaces
 set shiftwidth=4 "number of spaces to auto indent
 set expandtab " enter spaces when tab is presed
@@ -12,7 +13,9 @@ set number "line numbers
 filetype indent on " indent script by file type
 
 let mapleader = " "
-nnoremap <leader>r <C-c>:w<CR>:!python % 
+nnoremap <leader>sa <C-c>:w<CR>:!ptlint %
+nnoremap <leader>st <C-c>:w<CR>:!python -m pytest %
+nnoremap <leader>sr <C-c>:w<CR>:!python % 
 
 " set tabname to filename
 let &titlestring = @%
@@ -37,6 +40,8 @@ let g:seoul256_background = 235
 colo seoul256
 " set airline theme
 let g:airline_theme='angr'
+let g:airline#extensions#tabline#enabled = 1 "see baffer when there is only one file open
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " make :make % run pylint on current file and move to quickfix window
 " bag: don't sort by line numbers;
@@ -69,9 +74,14 @@ let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomatic
 let g:jedi#show_call_signatures = "0" "dont show function arguments
 "jedi shortcuts
 let g:jedi#goto_command = "<leader>d"
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = ""
+let g:jedi#goto_assignments_command = "gA"
+let g:jedi#goto_definitions_command = "gD"
 let g:jedi#documentation_command = "K"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = ""
+let g:jedi#rename_command = "<leader>r"
+
+
+" dearch highlight
+set hlsearch
+highlight! default link Search Visual 
