@@ -13,9 +13,10 @@ set number "line numbers
 filetype indent on " indent script by file type
 
 let mapleader = " "
-nnoremap <leader>sa <C-c>:w<CR>:!ptlint %
-nnoremap <leader>st <C-c>:w<CR>:!python -m pytest %
-nnoremap <leader>sr <C-c>:w<CR>:!python % 
+autocmd filetype python nnoremap <F3> <C-c>:w<CR>:cexpr system('pylint --reports=n --output-format=parseable ' . expand('%'))<CR>:copen<CR>
+autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
+autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
+autocmd FileType python set errorformat=%f:%l:\ %m
 
 " set tabname to filename
 let &titlestring = @%
@@ -45,9 +46,6 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " make :make % run pylint on current file and move to quickfix window
 " bag: don't sort by line numbers;
-autocmd FileType python set makeprg=pylint\ --reports=n\ --output-format=parseable
-autocmd FileType python set errorformat=%f:%l:\ %m
-autocmd QuickFixCmdPost [^l]* cwindow
 
 
 " add .profile configs to vim shell
