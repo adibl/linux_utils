@@ -83,3 +83,17 @@ let g:jedi#rename_command = "<leader>r"
 " dearch highlight
 set hlsearch
 highlight! default link Search Visual 
+
+set t_ut="" "fix win 10 bag https://github.com/microsoft/terminal/issues/832
+set ttyscroll=1
+
+
+" set relative number in command mode and absulote number when lose focus or
+" insert mode
+set number relativenumber
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
