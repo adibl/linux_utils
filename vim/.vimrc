@@ -13,6 +13,8 @@ set number "line numbers
 filetype indent on " indent script by file type
 
 let mapleader = " "
+" run pylint every file save
+autocmd filetype python autocmd BufWritePost  * :silent cgetexpr system('pylint --reports=n --output-format=parseable ' . expand('%')) 
 autocmd filetype python nnoremap <F3> <C-c>:w<CR>:cexpr system('pylint --reports=n --output-format=parseable ' . expand('%'))<CR>:copen<CR>
 autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
 autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
@@ -27,25 +29,39 @@ set title
 call plug#begin('~/.vim/plugged')
 Plug 'kh3phr3n/python-syntax'
 Plug 'junegunn/seoul256.vim' 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'lifepillar/vim-mucomplete'
+Plug 'itchyny/lightline.vim'
 Plug 'davidhalter/jedi-vim'
 call plug#end()
 
-" python-syntux plagin config
-let g:python_highlight_all = 1 " enable python highlight from python syntax plugin
+" config light line
+set laststatus=2 " uncrese line size recwiered for plugin
 
-" activate papercolor-theme
+function QuickFixLen()
+    return len(getqflist())
+endfunction
+
+"config lightline
+let g:lightline = {
+            \ 'colorscheme': 'seoul256',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'readonly', 'filename', 'modified'] ],
+            \   'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ],
+            \              [ 'fileformat', 'fileencoding', 'filetype', 'quickfix'] ]
+            \},
+            \ 'component_function': {
+            \   'quickfix': 'QuickFixLen'
+            \ },
+            \ }
+
+" color scheme set
 let g:seoul256_background = 235
 colo seoul256
-" set airline theme
-let g:airline_theme='angr'
-let g:airline#extensions#tabline#enabled = 1 "see baffer when there is only one file open
-let g:airline#extensions#tabline#buffer_nr_show = 1
 
-" make :make % run pylint on current file and move to quickfix window
-" bag: don't sort by line numbers;
+" python-syntux plagin config
+let g:python_highlight_all = 1 " enable python highlight from python syntax plugin
 
 
 " add .profile configs to vim shell
