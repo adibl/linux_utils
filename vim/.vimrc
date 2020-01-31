@@ -15,20 +15,16 @@ filetype indent on " indent script by file type
 let mapleader = " "
 " run pylint every file save
 autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
-autocmd filetype python nnoremap <F3> <C-c>:w<CR>:silent call Pylint()<CR>:lopen<CR>
 autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
 autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
 autocmd FileType python set errorformat=%f:%l:\ %m
 
+let my#file_name=''
 function Pylint()
-    let file_name='cach/' . expand('%:t:r') . '.err'
-    if filereadable('cach/' . expand('%:t:r') . '.err')
-        execute 'lgetfile ' . file_name
-    else
-        let line='!tmux new -d "pyflakes ' . expand('%') . ' > ' . file_name . '"'
-        execute line
-        execute 'lgetfile ' . file_name
-    endif
+    let my#file_name='cach/' . expand('%:t:r') . '.err'
+    let line='!pyflakes ' . expand('%') . ' > ' . my#file_name
+    execute line
+    execute 'lgetfile ' . my#file_name
 endfunction
 
 
@@ -120,8 +116,8 @@ let g:jedi#rename_command = "<leader>r"
 set hlsearch
 highlight! default link Search Visual 
 
-set t_ut="" "fix win 10 bag https://github.com/microsoft/terminal/issues/832
-set ttyscroll=1
+"set t_ut="" "fix win 10 bag https://github.com/microsoft/terminal/issues/832
+"set ttyscroll=1
 
 
 " set relative number in command mode and absulote number when lose focus or
