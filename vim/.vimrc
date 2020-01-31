@@ -25,7 +25,7 @@ function Pylint()
     if filereadable('cach/' . expand('%:t:r') . '.err')
         execute 'lgetfile ' . file_name
     else
-        let line='!tmux new -d "pylint --reports=n --output-format=parseable ' . expand('%') . ' > ' . file_name . '"'
+        let line='!tmux new -d "pyflakes ' . expand('%') . ' > ' . file_name . '"'
         execute line
         execute 'lgetfile ' . file_name
     endif
@@ -53,7 +53,7 @@ function QuickFixLen()
     if &filetype=='python'
         let file_name='cach/' . expand('%:t:r') . '.err'
         if filereadable(file_name)
-            let g:my#pylint_len=system('wc -l ' . file_name . ' | grep -o [0-9]*')
+            let g:my#pylint_len=system('wc -l ' . file_name . ' | grep -o [0-9]* | head -1')
         else
             let g:my#pylint_len='NF'
         endif
