@@ -17,12 +17,13 @@ let mapleader = " "
 autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
 autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
 autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
-autocmd FileType python set errorformat=%f:%l:\ %m
+autocmd FileType python set errorformat+=%f:%l:%c:\ %m
+autocmd FileType python set errorformat+=%f:%l:\ %m
 
 let my#file_name=''
 function Pylint()
     let my#file_name='cach/' . expand('%:t:r') . '.err'
-    let line='!pyflakes ' . expand('%') . ' > ' . my#file_name
+    let line='!pyflakes ' . expand('%') . ' &> ' . my#file_name
     execute line
     execute 'lgetfile ' . my#file_name
 endfunction
