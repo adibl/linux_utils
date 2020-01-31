@@ -14,11 +14,23 @@ filetype indent on " indent script by file type
 
 let mapleader = " "
 " run pylint every file save
-autocmd filetype python autocmd BufWritePost  * :silent cgetexpr system('pylint --reports=n --output-format=parseable ' . expand('%')) 
-autocmd filetype python nnoremap <F3> <C-c>:w<CR>:cexpr system('pylint --reports=n --output-format=parseable ' . expand('%'))<CR>:copen<CR>
+autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
+autocmd filetype python nnoremap <F3> <C-c>:w<CR>:silent call Pylint()<CR>:lopen<CR>
 autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
 autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
 autocmd FileType python set errorformat=%f:%l:\ %m
+
+function Pylint()
+    let file_name='cach/' . expand('%:t:r') . '.err'
+    if filereadable('cach/' . expand('%:t:r') . '.err')
+        execute 'lgetfile ' . file_name
+    else
+        let line='!tmux new -d "pylint --reports=n --output-format=parseable ' . expand('%') . ' > ' . file_name . '"'
+        execute line
+        execute 'lgetfile ' . file_name
+    endif
+endfunction
+
 
 " set tabname to filename
 let &titlestring = @%
@@ -36,9 +48,17 @@ call plug#end()
 
 " config light line
 set laststatus=2 " uncrese line size recwiered for plugin
-
+let g:my#pylint_len=''
 function QuickFixLen()
-    return len(getqflist())
+    if &filetype=='python'
+        let file_name='cach/' . expand('%:t:r') . '.err'
+        if filereadable(file_name)
+            let g:my#pylint_len=system('wc -l ' . file_name . ' | grep -o [0-9]*')
+        else
+            let g:my#pylint_len='NF'
+        endif
+    endif
+    return g:my#pylint_len
 endfunction
 
 "config lightline
