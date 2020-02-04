@@ -11,14 +11,18 @@ set shiftwidth=4 "number of spaces to auto indent
 set expandtab " enter spaces when tab is presed
 set number "line numbers
 filetype indent on " indent script by file type
+set showmatch
 
 let mapleader = " "
-" run pylint every file save
-autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
-autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
-autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
-autocmd FileType python set errorformat+=%f:%l:%c:\ %m
-autocmd FileType python set errorformat+=%f:%l:\ %m
+
+augroup python_auto
+    " run pylint every file save
+    autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
+    autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
+    autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
+    autocmd FileType python set errorformat+=%f:%l:%c:\ %m " python compilation problems
+    autocmd FileType python set errorformat+=%f:%l:\ %m " python pyflake format
+augroup END
 
 let my#file_name=''
 function Pylint()
@@ -73,6 +77,7 @@ let g:lightline = {
             \ },
             \ }
 
+
 " color scheme set
 let g:seoul256_background = 235
 colo seoul256
@@ -107,7 +112,7 @@ let g:jedi#show_call_signatures = "0" "dont show function arguments
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "gA"
 let g:jedi#goto_definitions_command = "gD"
-let g:jedi#documentation_command = "K"
+let g:jedi#documentation_command = ""
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>r"
@@ -115,6 +120,9 @@ let g:jedi#rename_command = "<leader>r"
 
 " dearch highlight
 set hlsearch
+
+" fix higlight colors for search and jedi
+highlight! default link jediUsage Visual
 highlight! default link Search Visual 
 
 "set t_ut="" "fix win 10 bag https://github.com/microsoft/terminal/issues/832
