@@ -1,3 +1,4 @@
+set nocompatible
 set t_Co=256 "config vim to use 256 colors set background=dark "to fix tmux wird colors problem
 syntax on "basic python syntax
 
@@ -17,9 +18,11 @@ let mapleader = " "
 
 augroup python_auto
     " run pylint every file save
+    autocmd filetype python setlocal formatprg=autopep8\ -
+    autocmd filetype python autocmd BufWritePre *  :execute "normal \<C-Home>gq\<C-End>\<C-O>\<C-O>"
     autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
-    autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %
-    autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python % 
+    autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %<CR>
+    autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python %<CR> 
     autocmd FileType python set errorformat+=%f:%l:%c:\ %m " python compilation problems
     autocmd FileType python set errorformat+=%f:%l:\ %m " python pyflake format
 augroup END
@@ -29,7 +32,7 @@ function Pylint()
     let my#file_name='cach/' . expand('%:t:r') . '.err'
     let line='!pyflakes ' . expand('%') . ' &> ' . my#file_name
     execute line
-    execute 'lgetfile ' . my#file_name
+    execute 'lfile ' . my#file_name
 endfunction
 
 
@@ -41,7 +44,7 @@ set title
 " plagin support, initialize plagin meneger
 call plug#begin('~/.vim/plugged')
 Plug 'kh3phr3n/python-syntax'
-Plug 'junegunn/seoul256.vim' 
+Plug 'altercation/vim-colors-solarized'
 Plug 'lifepillar/vim-mucomplete'
 Plug 'itchyny/lightline.vim'
 Plug 'davidhalter/jedi-vim'
@@ -77,10 +80,12 @@ let g:lightline = {
             \ },
             \ }
 
-
-" color scheme set
-let g:seoul256_background = 235
-colo seoul256
+if strftime("%H") < 16
+  set background=light
+else
+  set background=dark
+endif
+colorscheme solarized
 
 " python-syntux plagin config
 let g:python_highlight_all = 1 " enable python highlight from python syntax plugin
@@ -100,23 +105,23 @@ set undodir=~/.vim/undo " undo files path
 set diffopt+=indent-heuristic "see if line that was deleted is few lines after
 set diffopt+=algorithm:histogram "change to best algiruithem
 set diffopt+=iwhiteall " ignore all white spaces
-set diffopt+=iblank " ignore blank lines changes
 
 "config autocomplete
 set completeopt-=preview
 set completeopt+=longest,menuone,noselect
 let g:jedi#popup_on_dot = 0 " dot autoto popup afterter dot
 let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomaticly
-let g:jedi#show_call_signatures = "0" "dont show function arguments
+let g:jedi#show_call_signatures = 0 "dont show function arguments
 "jedi shortcuts
+let g:jedi#auto_vim_configuration = 0
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "gA"
 let g:jedi#goto_definitions_command = "gD"
-let g:jedi#documentation_command = ""
+let g:jedi#goto_stubs_command = ""
+let g:jedi#documentation_command = "K"
 let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<C-Space>"
+let g:jedi#completions_command = ""
 let g:jedi#rename_command = "<leader>r"
-
 
 " dearch highlight
 set hlsearch
