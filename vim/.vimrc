@@ -19,10 +19,8 @@ let mapleader = " "
 augroup python_auto
     " run pylint every file save
     autocmd filetype python setlocal formatprg=autopep8\ -
-    autocmd filetype python autocmd BufWritePre *  :execute "normal \<C-Home>gq\<C-End>\<C-O>\<C-O>"
-    autocmd filetype python autocmd BufWritePost *  :silent call Pylint()
-    autocmd filetype python nnoremap <F2> <C-c>:w<CR>:!python -m pytest %<CR>
-    autocmd filetype python nnoremap <F1> <C-c>:w<CR>:!python %<CR> 
+    autocmd filetype python autocmd BufWritePre * silent execute "keepjumps normal mA \<C-Home>gq\<C-End>'A"
+    autocmd filetype python autocmd BufWritePost *  silent call Pylint()
     autocmd FileType python set errorformat+=%f:%l:%c:\ %m " python compilation problems
     autocmd FileType python set errorformat+=%f:%l:\ %m " python pyflake format
 augroup END
@@ -108,12 +106,11 @@ set diffopt+=iwhiteall " ignore all white spaces
 
 "config autocomplete
 set completeopt-=preview
-set completeopt+=longest,menuone,noselect
+set completeopt+=menuone,noselect,noinsert
 let g:jedi#popup_on_dot = 0 " dot autoto popup afterter dot
 let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomaticly
-let g:jedi#show_call_signatures = 0 "dont show function arguments
+let g:jedi#show_call_signatures ="0" "dont show function arguments
 "jedi shortcuts
-let g:jedi#auto_vim_configuration = 0
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "gA"
 let g:jedi#goto_definitions_command = "gD"
@@ -143,3 +140,9 @@ augroup numbertoggle
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
+
+
+" pdb tools
+au FileType python map <silent> <leader>o oimport pdb; pdb.set_trace()<esc>
+au FileType python map <silent> <leader>O Oimport pdb; pdb.set_trace()<esc>
+au filetype python map <silent> <leader>x :g/pdb/d<esc>
