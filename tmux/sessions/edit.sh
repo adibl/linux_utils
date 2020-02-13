@@ -12,7 +12,6 @@ then
 
     tmux select-pane -t $SESSION:1.1
     tmux send-keys "vim ~/.vimrc" C-m
-    tmux send-key ":tabnew ~/.tmux.conf" C-m
 
     tmux select-pane -t $SESSION:1.2
 
@@ -21,14 +20,10 @@ then
     tmux new-window -t $SESSION:2 -n compare
     sleep .5
     tmux select-pane -t $SESSION:2.1
-    tmux split-window -h
 
-    tmux select-pane -t $SESSION:2.1
-    tmux send-keys "vim -R  ~/PycharmProjects/algoritems/test_class.py" C-m
+    tmux send-keys "cd ~/PycharmProjects/algoritems" C-m
+    tmux send-keys "vim test_class.py" C-m
     
-    tmux select-pane -t $SESSION:2.2
-    tmux send-keys "vim -R  ~/PycharmProjects/algoritems/test_class.py" C-m
-
     tmux select-window -t $SESSION:1
     tmux attach-session -t $SESSION 
 else

@@ -9,6 +9,7 @@ let mapleader = " "
 set path+=** "search file in all subdirectory
 set wildmenu "set menu to select if multible files match
 set wildignore+=*.pyc "ignore python run files in search
+set wildignore+=*.err "ignore err files creted by pyflakes
 
 "tabs and indent
 set tabstop=4 "replace tab with 4 spaces
@@ -18,7 +19,7 @@ filetype indent on " indent script by file type
 
 " python autocommand
 augroup python_auto
-    " run pylint every file save
+    autocmd!
     autocmd filetype python setlocal formatprg=autopep8\ -
     autocmd filetype python autocmd BufWritePre * silent execute "keepjumps normal mA \<C-Home>gq\<C-End>'A"
     autocmd filetype python autocmd BufWritePost *  silent call Pylint()
@@ -26,12 +27,12 @@ augroup python_auto
     autocmd FileType python set errorformat+=%f:%l:\ %m " python pyflake format
 augroup END
 " 
-let my#file_name=''
+let g:my#file_name=''
 function Pylint()
-    let my#file_name='cach/' . expand('%:t:r') . '.err'
-    let line='!pyflakes ' . expand('%') . ' &> ' . my#file_name
+    let g:my#file_name='cach/' . expand('%:t:r') . '.err'
+    let line='!pyflakes ' . expand('%') . ' &> ' . g:my#file_name
     execute line
-    execute 'lfile ' . my#file_name
+    execute 'lfile ' . g:my#file_name
 endfunction
 
 
@@ -95,9 +96,8 @@ set laststatus=2 " uncrese line size recwiered for plugin
 let g:my#pylint_len=''
 function QuickFixLen()
     if &filetype=='python'
-        let file_name='cach/' . expand('%:t:r') . '.err'
-        if filereadable(file_name)
-            let g:my#pylint_len=system('wc -l ' . file_name . ' | grep -o [0-9]* | head -1')
+        if filereadable(g:my#file_name)
+            let g:my#pylint_len=system('wc -l ' . g:my#file_name . ' | grep -o [0-9]* | head -1')
         else
             let g:my#pylint_len='NF'
         endif
