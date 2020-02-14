@@ -2,7 +2,6 @@
 SESSION="algoritems"
 SESSIONEXISTS=$(tmux list-sessions | grep $SESSION)
 START_DIR='/home/adi/PycharmProjects/algoritems/'
-CONDA_DEFAULT_ENV="al" 
 
 cd "$START_DIR"
 # Only create tmux session if it doesn't already exist
