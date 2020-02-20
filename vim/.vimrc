@@ -21,12 +21,9 @@ filetype indent on " indent script by file type
 " python autocommand
 augroup python_auto
     autocmd!
-    au filetype python map <silent> <leader>l :call Lint()<esc>
     autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
 augroup END
-function Lint()
-    LspDocumentFormatSync
-    w
+function! Lint() abort
     LspDocumentDiagnostics
     lclose
 endfunction
@@ -92,15 +89,21 @@ call plug#end()
 set laststatus=2 " uncrese line size recwiered for plugin
 let g:my#pylint_len=''
 let g:my#prev_pylint_len=''
-function LocalListLen()
+function! LocalListLen() abort
     silent! call UpdatLen()
-    return g:my#pylint_len . '|' . g:my#prev_pylint_len
+    return g:my#pylint_len . '<-' . g:my#prev_pylint_len
 endfunction
-function UpdatLen()
-    if (g:my#pylint_len != len(getloclist(0)))
-        let g:my#prev_pylint_len = g:my#pylint_len
-        let g:my#pylint_len = len(getloclist(0))
+let g:my#functime1 = reltime()
+function! UpdatLen() abort
+    if reltimefloat(reltime(g:my#functime1)) < 5.0 
+        if (g:my#pylint_len != len(getloclist(0)))
+            let g:my#prev_pylint_len = g:my#pylint_len
+            let g:my#pylint_len = len(getloclist(0))
+        else
+            call Lint()
+        endif
     endif
+    let g:my#functime1 = reltime()
 endfunction
 "
 " lightline config
@@ -132,7 +135,7 @@ let g:python_highlight_all = 1 " enable python highlight from python syntax plug
 
 " lsp config
 if executable('pyls')
-    au User lsp_setup call lsp#register_server({
+    autocmd! User lsp_setup call lsp#register_server({
                 \ 'name': 'pyls',
                 \ 'cmd': {server_info->['pyls']},
                 \ 'whitelist': ['python'],
@@ -149,10 +152,7 @@ nnoremap <leader>d :LspDefinition<CR>
 nnoremap <leader>r :LspRename<CR>
 nnoremap K :LspHover<CR>
 setlocal omnifunc=lsp#complete
-let g:lsp_textprop_enabled = 1 " need to find how to exclude warnings
-highlight! default link LspErrorHighight Error " set lsp error color
-highlight! link LspWarningHighlight default " set lsp warinig color to none 
-
+let g:lsp_textprop_enabled = 0 " disable color errors
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
 
