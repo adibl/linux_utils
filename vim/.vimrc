@@ -1,4 +1,5 @@
 set nocompatible
+filetype on
 set t_Co=256 "config vim to use 256 colors set background=dark "to fix tmux wird colors problem
 syntax on "basic python syntax
 filetype plugin on "??
@@ -20,10 +21,12 @@ filetype indent on " indent script by file type
 " python autocommand
 augroup python_auto
     autocmd!
+    au filetype python map <silent> <leader>l :call Lint()<esc>
     autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
-    autocmd filetype python autocmd BufWritePost * silent call Lint()
 augroup END
 function Lint()
+    LspDocumentFormatSync
+    w
     LspDocumentDiagnostics
     lclose
 endfunction
@@ -141,13 +144,15 @@ if executable('pyls')
                 \ })
 endif
 let g:lsp_signs_enabled = 0
-let g:lsp_highlights_enabled = 0 " dont highlight errors
-let g:lsp_textprop_enabled = 0 " dont highlight errors
 let g:lsp_preview_float = 1 " dont use float window to hover
 nnoremap <leader>d :LspDefinition<CR>
 nnoremap <leader>r :LspRename<CR>
 nnoremap K :LspHover<CR>
 setlocal omnifunc=lsp#complete
+let g:lsp_textprop_enabled = 1 " need to find how to exclude warnings
+highlight! default link LspErrorHighight Error " set lsp error color
+highlight! link LspWarningHighlight default " set lsp warinig color to none 
+
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
 
