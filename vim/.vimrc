@@ -21,17 +21,8 @@ filetype indent on " indent script by file type
 " python autocommand
 augroup python_auto
     autocmd!
-    au filetype python map <silent> <leader>l :call Lint()<esc>
     autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
 augroup END
-function Lint()
-    LspDocumentFormatSync
-    w
-    LspDocumentDiagnostics
-    lclose
-endfunction
-" 
-
 
 " set tabname to filename
 let &titlestring = @%
@@ -92,14 +83,21 @@ call plug#end()
 set laststatus=2 " uncrese line size recwiered for plugin
 let g:my#pylint_len=''
 let g:my#prev_pylint_len=''
+let g:my#time=reltime()
 function LocalListLen()
     silent! call UpdatLen()
     return g:my#pylint_len . '|' . g:my#prev_pylint_len
 endfunction
+
 function UpdatLen()
-    if (g:my#pylint_len != len(getloclist(0)))
-        let g:my#prev_pylint_len = g:my#pylint_len
-        let g:my#pylint_len = len(getloclist(0))
+    if reltimefloat(reltime(g:my#time)) < 5.0
+        if (g:my#pylint_len != len(getloclist(0)))
+            let g:my#prev_pylint_len = g:my#pylint_len
+            let g:my#pylint_len = len(getloclist(0))
+        endif
+    else
+        LspDocumentDiagnostics
+        let g:my#time = reltime()
     endif
 endfunction
 "
@@ -148,10 +146,10 @@ let g:lsp_preview_float = 1 " dont use float window to hover
 nnoremap <leader>d :LspDefinition<CR>
 nnoremap <leader>r :LspRename<CR>
 nnoremap K :LspHover<CR>
+nnoremap [l :lnext<CR>
+nnoremap ]l :lprev<CR>
 setlocal omnifunc=lsp#complete
-let g:lsp_textprop_enabled = 1 " need to find how to exclude warnings
-highlight! default link LspErrorHighight Error " set lsp error color
-highlight! link LspWarningHighlight default " set lsp warinig color to none 
+let g:lsp_textprop_enabled = 0 " enfable
 
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
