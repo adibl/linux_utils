@@ -1,8 +1,7 @@
 set nocompatible
-filetype on
 set t_Co=256 "config vim to use 256 colors set background=dark "to fix tmux wird colors problem
 syntax on "basic python syntax
-filetype plugin on "??
+filetype plugin indent on " activate filetype based plugin and indentation
 set showmatch
 let mapleader = " "
 
@@ -16,12 +15,11 @@ set wildignore+=*.err "ignore err files creted by pyflakes
 set tabstop=4 "replace tab with 4 spaces
 set shiftwidth=4 "number of spaces to auto indent
 set expandtab " enter spaces when tab is presed
-filetype indent on " indent script by file type
 
 " python autocommand
 augroup python_auto
     autocmd!
-    autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
+    " autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
 augroup END
 
 " set tabname to filename
@@ -76,6 +74,7 @@ Plug 'lifepillar/vim-mucomplete'
 Plug 'itchyny/lightline.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 call plug#end()
 
 "lightline config
@@ -86,7 +85,7 @@ let g:my#prev_pylint_len=''
 let g:my#time=reltime()
 function LocalListLen()
     silent! call UpdatLen()
-    return g:my#pylint_len . '|' . g:my#prev_pylint_len
+    return g:my#pylint_len . '<-' . g:my#prev_pylint_len
 endfunction
 
 function UpdatLen()
@@ -134,6 +133,7 @@ if executable('pyls')
                 \ 'name': 'pyls',
                 \ 'cmd': {server_info->['pyls']},
                 \ 'whitelist': ['python'],
+                \ 'workspace_config': {'pyls': {'plugins': {'pycodestyle': {'enabled': v:false}}}},
                 \ 'root_uri':{server_info->lsp#utils#path_to_uri(
                 \	lsp#utils#find_nearest_parent_file_directory(
                 \		lsp#utils#get_buffer_path(),
@@ -144,13 +144,11 @@ endif
 let g:lsp_signs_enabled = 0
 let g:lsp_preview_float = 1 " dont use float window to hover
 nnoremap <leader>d :LspDefinition<CR>
+nnoremap <leader>f :LspDocumentFormatSync<CR>
 nnoremap <leader>r :LspRename<CR>
 nnoremap K :LspHover<CR>
-nnoremap [l :lnext<CR>
-nnoremap ]l :lprev<CR>
 setlocal omnifunc=lsp#complete
 let g:lsp_textprop_enabled = 0 " enfable
-
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
 
