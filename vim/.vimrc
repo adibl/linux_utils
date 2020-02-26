@@ -99,8 +99,8 @@ function UpdatLen()
         LspDocumentDiagnostics
         let g:my#time = reltime()
     endif
+    return g:my#pylint_len . '<-' . g:my#prev_pylint_len
 endfunction
-"
 " lightline config
 let g:lightline = {
             \ 'colorscheme': 'seoul256',
@@ -130,7 +130,7 @@ let g:python_highlight_all = 1 " enable python highlight from python syntax plug
 
 " lsp config
 if executable('pyls')
-    au User lsp_setup call lsp#register_server({
+    autocmd! User lsp_setup call lsp#register_server({
                 \ 'name': 'pyls',
                 \ 'cmd': {server_info->['pyls']},
                 \ 'whitelist': ['python'],
@@ -146,11 +146,11 @@ let g:lsp_preview_float = 1 " dont use float window to hover
 nnoremap <leader>d :LspDefinition<CR>
 nnoremap <leader>r :LspRename<CR>
 nnoremap K :LspHover<CR>
-nnoremap [l :lnext<CR>
-nnoremap ]l :lprev<CR>
+nnoremap [e :LspNextDiagnostic<CR>
+nnoremap ]e :LspPreviousDiagnostic<CR>
+let g:lsp_diagnostics_echo_cursor = 1
 setlocal omnifunc=lsp#complete
-let g:lsp_textprop_enabled = 0 " enfable
-
+let g:lsp_textprop_enabled = 0 " disable color errors
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
 
