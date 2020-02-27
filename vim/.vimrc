@@ -19,7 +19,10 @@ set expandtab " enter spaces when tab is presed
 " python autocommand
 augroup python_auto
     autocmd!
-    " autocmd filetype python autocmd BufWritePre * silent LspDocumentFormatSync
+    " pdb tools
+    autocmd filetype python map <silent> <leader>o oimport pdb; pdb.set_trace()<esc>
+    autocmd filetype python map <silent> <leader>O Oimport pdb; pdb.set_trace()<esc>
+    autocmd filetype python map <silent> <leader>x :g/pdb/d<esc>
 augroup END
 
 " set tabname to filename
@@ -44,7 +47,6 @@ set diffopt+=iwhiteall " ignore all white spaces
 
 " search highlight
 set hlsearch
-
 " fix higlight colors for search 
 highlight! default link Search Visual 
 
@@ -60,11 +62,6 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-
-" pdb tools
-au FileType python map <silent> <leader>o oimport pdb; pdb.set_trace()<esc>
-au FileType python map <silent> <leader>O Oimport pdb; pdb.set_trace()<esc>
-au filetype python map <silent> <leader>x :g/pdb/d<esc>
 
 " plagin support, initialize plagin meneger
 call plug#begin('~/.vim/plugged')
@@ -98,7 +95,6 @@ function UpdatLen()
         LspDocumentDiagnostics
         let g:my#time = reltime()
     endif
-    return g:my#pylint_len . '<-' . g:my#prev_pylint_len
 endfunction
 " lightline config
 let g:lightline = {
