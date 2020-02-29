@@ -29,8 +29,6 @@ augroup END
 augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
-    autocmd filetype c imap } <CR><Plug>(PearTreeExpandOne)<CR>
-    autocmd filetype c imap <Nop> <Plug>(PearTreeCloser_})
 augroup END
 
 " set tabname to filename
@@ -80,7 +78,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'tmsvg/pear-tree'
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
 "lightline config
@@ -165,7 +163,3 @@ set completeopt-=preview
 set completeopt+=menuone,noselect,noinsert
 let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomaticly
 
-" smart paring enabled
-let g:pear_tree_smart_openers = 1
-let g:pear_tree_smart_closers = 1
-let g:pear_tree_smart_backspace = 1
