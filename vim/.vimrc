@@ -31,6 +31,10 @@ augroup c_auto
     autocmd filetype c set makeprg=cc\ % 
 augroup END
 
+" copy filetype
+nmap <leader>cn :let @+=expand("%")<CR>
+nmap <leader>cp :let @+=expand("%:p")<CR>
+
 " set tabname to filename
 let &titlestring = @%
 set title
