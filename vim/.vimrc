@@ -5,7 +5,7 @@ filetype plugin indent on " activate filetype based plugin and indentation
 set showmatch
 let mapleader = " "
 
-    
+
 set path+=** "search file in all subdirectory
 set wildmenu "set menu to select if multible files match
 set wildignore+=*.pyc "ignore python run files in search
@@ -67,9 +67,9 @@ highlight! default link Search Visual
 "numbers
 set number relativenumber
 augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
 
@@ -83,6 +83,7 @@ Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'jiangmiao/auto-pairs'
+Plug 'machakann/vim-sandwich'
 call plug#end()
 
 "lightline config
@@ -126,9 +127,9 @@ let g:lightline = {
 
 " colorscheme config
 if strftime("%H") < 16
-  set background=light
+    set background=light
 else
-  set background=dark
+    set background=dark
 endif
 colorscheme solarized
 
@@ -167,3 +168,14 @@ set completeopt-=preview
 set completeopt+=menuone,noselect,noinsert
 let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomaticly
 
+
+" vim-sandwich resapoes
+let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
+autocmd FileType c let g:sandwich#recipes += [
+            \   {
+            \     'buns'        : ['{', '}'],
+            \     'motionwise'  : ['line'],
+            \     'kind'        : ['add'],
+            \     'command'     : ["'[-1normal J"], " '[ is the open bracket position
+            \   },
+            \ ]
