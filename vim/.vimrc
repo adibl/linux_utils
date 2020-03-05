@@ -175,6 +175,6 @@ autocmd filetype c let g:sandwich#recipes += [
             \     'buns'        : ['{', '}'],
             \     'motionwise'  : ['line'],
             \     'kind'        : ['add'],
-            \     'command'     : ["'[-1normal J"],
+            \     'command'     : ["normal '[=']'", "'[-1normal J"],
             \   },
             \ ]
