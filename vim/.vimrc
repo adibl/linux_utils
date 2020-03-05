@@ -63,7 +63,6 @@ highlight! default link Search Visual
 "set t_ut="" "fix win 10 bag https://github.com/microsoft/terminal/issues/832
 "set ttyscroll=1
 
-
 "numbers
 set number relativenumber
 augroup numbertoggle
@@ -171,11 +170,11 @@ let g:mucomplete#enable_auto_at_startup = 0 "storeart autotocomplete autotomatic
 
 " vim-sandwich resapoes
 let g:sandwich#recipes = deepcopy(g:sandwich#default_recipes)
-autocmd FileType c let g:sandwich#recipes += [
+autocmd filetype c let g:sandwich#recipes += [
             \   {
             \     'buns'        : ['{', '}'],
             \     'motionwise'  : ['line'],
             \     'kind'        : ['add'],
-            \     'command'     : ["'[-1normal J"], " '[ is the open bracket position
+            \     'command'     : ["'[-1normal J"],
             \   },
             \ ]
