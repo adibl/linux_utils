@@ -23,12 +23,21 @@ augroup python_auto
     autocmd filetype python map <silent> <leader>o oimport pdb; pdb.set_trace()<esc>
     autocmd filetype python map <silent> <leader>O Oimport pdb; pdb.set_trace()<esc>
     autocmd filetype python map <silent> <leader>x :g/pdb/d<esc>
+    " lsp shortcats
+    autocmd filetype python nnoremap <leader>d :LspDefinition<CR>
+    autocmd filetype python nnoremap <leader>f :LspDocumentFormatSync<CR>
+    autocmd filetype python nnoremap <leader>r :LspRename<CR>
+    autocmd filetype python nnoremap K :LspHover<CR>
+setlocal omnifunc=lsp#complete
 augroup END
 
 " c autocommand
 augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
+    " indent all file without moving curresor, use marks
+    autocmd filetype c map <leader>f mA:%!indent -kr -bap -i4 --no-tabs<CR> `A
+    autocmd filetype c set formatprg=indent\ -kr\ -i4\ --no-tabs
 augroup END
 
 " copy filetype
@@ -55,8 +64,8 @@ set diffopt+=indent-heuristic "see if line that was deleted is few lines after
 set diffopt+=algorithm:histogram "change to best algiruithem
 set diffopt+=iwhiteall " ignore all white spaces
 
-" search highlight
-set hlsearch
+" search highlight disabled
+" set hlsearch
 " fix higlight colors for search 
 highlight! default link Search Visual 
 
@@ -111,7 +120,7 @@ function UpdatLen()
 endfunction
 " lightline config
 let g:lightline = {
-            \ 'colorscheme': 'seoul256',
+            \ 'colorscheme': 'solarized',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'readonly', 'filename', 'modified'] ],
@@ -152,11 +161,6 @@ if executable('pyls')
 endif
 let g:lsp_signs_enabled = 0
 let g:lsp_preview_float = 1 " dont use float window to hover
-nnoremap <leader>d :LspDefinition<CR>
-nnoremap <leader>f :LspDocumentFormatSync<CR>
-nnoremap <leader>r :LspRename<CR>
-nnoremap K :LspHover<CR>
-setlocal omnifunc=lsp#complete
 let g:lsp_textprop_enabled = 0 " enfable
 let g:lsp_signature_help_enabled = 0 " unable float woindow of current function argument data
 
