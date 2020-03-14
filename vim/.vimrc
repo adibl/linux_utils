@@ -101,7 +101,7 @@ let g:my#pylint_len=''
 let g:my#prev_pylint_len=''
 let g:my#time=reltime()
 function LocalListLen()
-    if(&ft=='py')
+    if(&ft=='python')
         silent! call UpdatLen()
         return g:my#pylint_len . '<-' . g:my#prev_pylint_len
     endif
