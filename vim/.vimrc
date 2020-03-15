@@ -36,8 +36,8 @@ augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
     " indent all file without moving curresor, use marks
-    autocmd filetype c map <leader>f mA:%!indent -kr -bap -i4 --no-tabs<CR> `A
-    autocmd filetype c set formatprg=indent\ -kr\ -i4\ --no-tabs
+    autocmd filetype c map <leader>f mA:%!indent -kr --no-tabs<CR> `A
+    autocmd filetype c set formatprg=indent\ -kr\ --no-tabs
 augroup END
 
 " copy filetype

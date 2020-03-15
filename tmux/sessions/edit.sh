@@ -1,9 +1,8 @@
 #!/bin/bash
 SESSION="edit"
 SESSIONEXISTS=$(tmux list-sessions | grep $SESSION)
-START_DIR='/home/adi'
+START_DIR='/home/adi/resources/'
 
-cd "$START_DIR"
 # Only create tmux session if it doesn't already exist
 if [ "$SESSIONEXISTS" = "" ]
 then
@@ -11,7 +10,7 @@ then
     tmux split-window -v -p 30
 
     tmux select-pane -t $SESSION:1.1
-    tmux send-keys "vim ~/.vimrc" C-m
+    tmux send-keys "vim vim/.vimrc" C-m
 
     tmux select-pane -t $SESSION:1.2
 

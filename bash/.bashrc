@@ -137,6 +137,15 @@ if [[ $TMUX ]]; then
     source "$(pipenv --venv)/bin/activate"
     clear
 fi
+
+CD_ROOT='/home/adi'
+cd () {
+    if [ $# = 0 ]; then
+        builtin cd $CD_ROOT 
+    else
+        builtin cd "$@"
+    fi
+}
 # my end ---------------------------------------------
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
