@@ -5,7 +5,6 @@ filetype plugin indent on " activate filetype based plugin and indentation
 set showmatch
 let mapleader = " "
 
-
 set path+=** "search file in all subdirectory
 set wildmenu "set menu to select if multible files match
 set wildignore+=*.pyc "ignore python run files in search
@@ -15,6 +14,11 @@ set wildignore+=*.err "ignore err files creted by pyflakes
 set tabstop=4 "replace tab with 4 spaces
 set shiftwidth=4 "number of spaces to auto indent
 set expandtab " enter spaces when tab is presed
+
+" add some emacs keybindings to insert and command modes
+inoremap <C-A> <C-o>^
+cnoremap <C-A> <Home>
+inoremap <C-e> <End>
 
 " python autocommand
 augroup python_auto
@@ -36,9 +40,20 @@ augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
     " indent all file without moving curresor, use marks
-    autocmd filetype c map <leader>f mA:%!indent -kr --no-tabs<CR> `A
+    autocmd filetype c map <leader>f ma:call Format()<CR>:w<CR> 'a
     autocmd filetype c set formatprg=indent\ -kr\ --no-tabs
 augroup END
+
+function Format()
+    silent :%!indent -kr --no-tabs
+    call UndoIfShellError()
+endfunction
+
+function! UndoIfShellError()
+    if v:shell_error
+        undo
+    endif
+endfunction
 
 " copy filetype
 nmap <leader>cn :let @+=expand("%")<CR>
@@ -92,7 +107,20 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'jiangmiao/auto-pairs'
 Plug 'machakann/vim-sandwich'
+Plug 'takac/vim-hardtime'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 call plug#end()
+
+"diable thingw with hardtime
+let g:hardtime_default_on = 1
+let g:hardtime_maxcount = 2
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_visual_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+" let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_disabled_keys = []
 
 "lightline config
 " see error file length function
