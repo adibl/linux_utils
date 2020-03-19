@@ -40,18 +40,29 @@ augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
     " indent all file without moving curresor, use marks
-    autocmd filetype c map <leader>f ma:call Format()<CR>:w<CR> 'a
+    autocmd filetype c map <leader>f :call Format()<CR>
     autocmd filetype c set formatprg=indent\ -kr\ --no-tabs
 augroup END
 
 function Format()
+    w
+    norm ma
     silent :%!indent -kr --no-tabs
-    call UndoIfShellError()
+    if v:shell_error
+        undo
+    endif
+    w
+    norm `a
+    if v:shell_error
+        echo "paranteses problem"
+    endif
 endfunction
 
 function! UndoIfShellError()
     if v:shell_error
         undo
+        messages clear
+        echomsg "missing paranteses"
     endif
 endfunction
 
