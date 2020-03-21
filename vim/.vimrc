@@ -1,5 +1,5 @@
 set nocompatible
-set t_Co=256 "config vim to use 256 colors set background=dark "to fix tmux wird colors problem
+set t_Co=16 "config vim to use 256 colors set background=dark "to fix tmux wird colors problem
 syntax on "basic python syntax
 filetype plugin indent on " activate filetype based plugin and indentation
 set showmatch
@@ -125,12 +125,12 @@ call plug#end()
 
 "diable thingw with hardtime
 let g:hardtime_default_on = 1
-let g:hardtime_maxcount = 2
+let g:hardtime_maxcount = 3
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
-let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_normal_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>", "x", 'w', 'b', 'W', 'B']
 let g:list_of_visual_keys = ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
-" let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
+let g:list_of_insert_keys = ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"]
 let g:list_of_disabled_keys = []
 
 "lightline config
@@ -221,3 +221,8 @@ autocmd filetype c let g:sandwich#recipes += [
             \     'command'     : ["normal '[=']'", "'[-1normal J"],
             \   },
             \ ]
+
+" debug
+packadd termdebug
+highlight! default link debugPC Visual
+let g:termdebug_wide = 1
