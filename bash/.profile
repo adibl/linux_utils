@@ -44,7 +44,7 @@ export VISUAL='vim'
 # start tmux on system startup
 tmux start-server
 
-export PYTHONPATH=$HOME/PycharmProjects/algoritems/py_algoritems/:
+export PYTHONPATH=/home/adi/usb/corsera_algoritems/py_algoritems:
 # end of my changes --------------------------------
 
 # Created by `userpath` on 2020-01-02 12:04:04

@@ -146,8 +146,8 @@ cd () {
         builtin cd "$@"
     fi
 }
-alias cda="cd /home/adi/PycharmProjects/algoritems"
-alias cdl="cd /home/adi/PycharmProjects/learn_c"
+alias cda="cd /home/adi/usb/corsera_algoritems"
+alias cdl="cd /home/adi/usb/learn_c"
 alias cdr="cd /home/adi/resources"
 # my end ---------------------------------------------
 
