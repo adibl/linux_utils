@@ -31,8 +31,9 @@ augroup python_auto
     autocmd filetype python nnoremap <leader>d :LspDefinition<CR>
     autocmd filetype python nnoremap <leader>f :LspDocumentFormatSync<CR>
     autocmd filetype python nnoremap <leader>r :LspRename<CR>
-    autocmd filetype python nnoremap K :LspHover<CR>
-setlocal omnifunc=lsp#complete
+    autocmd filetype python nnoremap <leader>k :LspHover<CR>
+    autocmd filetype python nnoremap K :<C-u>execute "!pydoc3 " . expand("<cword>")<CR>
+    autocmd filetype python setlocal omnifunc=lsp#complete
 augroup END
 
 " c autocommand
@@ -42,6 +43,9 @@ augroup c_auto
     " indent all file without moving curresor, use marks
     autocmd filetype c map <leader>f :call Format()<CR>
     autocmd filetype c set formatprg=indent\ -kr\ --no-tabs
+    " debug wrapper command line 228
+    autocmd filetype c nnoremap <leader>ds :call Debug()<CR>
+    autocmd filetype c nnoremap <leader>de :call EndDebug()<CR>
 augroup END
 
 function Format()
@@ -226,3 +230,27 @@ autocmd filetype c let g:sandwich#recipes += [
 packadd termdebug
 highlight! default link debugPC Visual
 let g:termdebug_wide = 1
+
+set scrolloff=0
+augroup CenterScreen
+    autocmd!
+    autocmd BufEnter,FocusGained * set scrolloff=3
+    autocmd BufLeave,FocusLost * set scrolloff=999
+augroup END
+autocmd! CenterScreen
+
+function Debug()
+    doautocmd CenterScreen
+    Termdebug
+    call TermDebugSendCommand('file ./a.out')
+    call TermDebugSendCommand('b main')
+    call TermDebugSendCommand('run')
+endfunction
+
+function EndDebug()
+    augroup! CenterScreen
+    call TermDebugSendCommand('')
+    call TermDebugSendCommand('q')
+    call TermDebugSendCommand('y')
+endfunction
+
