@@ -1,0 +1,5 @@
+# find out key name by sed -n l
+"\033[D": beginning-of-line
+"\033[B": beginning-of-line
+"\033[C": beginning-of-line
+"\033[A": beginning-of-line
