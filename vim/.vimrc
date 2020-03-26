@@ -51,6 +51,7 @@ augroup c_auto
     autocmd filetype c nnoremap <leader>r :LspRename<CR>
     autocmd filetype c nnoremap <leader>k :LspHover<CR>
     autocmd filetype c nnoremap <leader>u :LspReferences<CR>
+    autocmd filetype c nnoremap  <leader>s :LspWorkspaceSymbol<CR>
     autocmd FileType c setlocal omnifunc=lsp#complete
 augroup END
 
@@ -216,15 +217,13 @@ highlight! default link debugPC Visual
 let g:termdebug_wide = 1
 
 set scrolloff=0
-augroup CenterScreen
-    autocmd!
-    autocmd BufEnter,FocusGained * set scrolloff=3
-    autocmd BufLeave,FocusLost * set scrolloff=999
-augroup END
-autocmd! CenterScreen
 
 function Debug()
-    doautocmd CenterScreen
+    augroup CenterScreen
+        autocmd!
+        autocmd BufEnter,FocusGained * set scrolloff=0
+        autocmd BufLeave,FocusLost * set scrolloff=999
+    augroup END
     Termdebug
     call TermDebugSendCommand('file ./a.out')
     call TermDebugSendCommand('b main')
@@ -233,6 +232,7 @@ endfunction
 
 function EndDebug()
     augroup! CenterScreen
+    set scrolloff=0
     call TermDebugSendCommand('')
     call TermDebugSendCommand('q')
     call TermDebugSendCommand('y')
