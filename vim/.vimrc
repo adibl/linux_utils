@@ -32,6 +32,7 @@ augroup python_auto
     autocmd filetype python nnoremap <leader>f :LspDocumentFormatSync<CR>
     autocmd filetype python nnoremap <leader>r :LspRename<CR>
     autocmd filetype python nnoremap <leader>k :LspHover<CR>
+    autocmd filetype python nnoremap <leader>u :LspReferences<CR>
     autocmd filetype python nnoremap K :<C-u>execute "!pydoc3 " . expand("<cword>")<CR>
     autocmd filetype python setlocal omnifunc=lsp#complete
 augroup END
@@ -40,35 +41,18 @@ augroup END
 augroup c_auto
     autocmd!
     autocmd filetype c set makeprg=cc\ % 
-    " indent all file without moving curresor, use marks
-    autocmd filetype c map <leader>f :call Format()<CR>
-    autocmd filetype c set formatprg=indent\ -kr\ --no-tabs
     " debug wrapper command line 228
     autocmd filetype c nnoremap <leader>ds :call Debug()<CR>
     autocmd filetype c nnoremap <leader>de :call EndDebug()<CR>
+    " lsp
+    autocmd filetype c nnoremap <leader>d :LspDefinition<CR>
+    autocmd filetype c nnoremap <leader>e :LspDeclaration<CR>
+    autocmd filetype c nnoremap <leader>f :LspDocumentFormatSync<CR>
+    autocmd filetype c nnoremap <leader>r :LspRename<CR>
+    autocmd filetype c nnoremap <leader>k :LspHover<CR>
+    autocmd filetype c nnoremap <leader>u :LspReferences<CR>
+    autocmd FileType c setlocal omnifunc=lsp#complete
 augroup END
-
-function Format()
-    w
-    norm ma
-    silent :%!indent -kr --no-tabs
-    if v:shell_error
-        undo
-    endif
-    w
-    norm `a
-    if v:shell_error
-        echo "paranteses problem"
-    endif
-endfunction
-
-function! UndoIfShellError()
-    if v:shell_error
-        undo
-        messages clear
-        echomsg "missing paranteses"
-    endif
-endfunction
 
 " copy filetype
 nmap <leader>cn :let @+=expand("%")<CR>
@@ -106,8 +90,8 @@ highlight! default link Search Visual
 set number relativenumber
 augroup numbertoggle
     autocmd!
-    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-    autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+    autocmd BufEnter,FocusGained * set relativenumber
+    autocmd BufLeave,FocusLost * set norelativenumber
 augroup END
 
 
@@ -144,7 +128,7 @@ let g:my#pylint_len=''
 let g:my#prev_pylint_len=''
 let g:my#time=reltime()
 function LocalListLen()
-    if(&ft=='python')
+    if(&ft=='python' || &ft=='c')
         silent! call UpdatLen()
         return g:my#pylint_len . '<-' . g:my#prev_pylint_len
     endif
@@ -177,7 +161,7 @@ let g:lightline = {
             \ }
 
 " colorscheme config
-if strftime("%H") < 16
+if strftime("%H") < 17
     set background=light
 else
     set background=dark
@@ -254,3 +238,10 @@ function EndDebug()
     call TermDebugSendCommand('y')
 endfunction
 
+if executable('clangd-9')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd-9',
+        \ 'cmd': {server_info->['clangd-9', '-background-index']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
+endif

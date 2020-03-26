@@ -1,7 +1,7 @@
 #!/bin/bash
 SESSION="learn_c"
 SESSIONEXISTS=$(tmux list-sessions | grep $SESSION)
-START_DIR='/home/adi/PycharmProjects/learn_c/'
+START_DIR='/home/adi/usb/learn_c'
 
 cd "$START_DIR"
 # Only create tmux session if it doesn't already exist
